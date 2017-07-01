@@ -144,8 +144,8 @@ module.exports = function(grunt) {
 	// Сжимаем js
     uglify: {
       build: {
-          src: 'build/js/script.js',
-          dest: 'build/js/script.min.js'
+          src: 'build/js/main.js',
+          dest: 'build/js/main.min.js'
       }
     },
 	
@@ -168,8 +168,8 @@ module.exports = function(grunt) {
         options: {
           patterns: [
             {
-              match: /\"js\/script.js/g, 
-              replacement: '"js/script.min.js'
+              match: /\"js\/main.js/g, 
+              replacement: '"js/main.min.js'
             },
             {
               match: /\"css\/style.css/g, 
@@ -232,6 +232,16 @@ module.exports = function(grunt) {
           spawn: false
         },
       },
+      // следить за скриптами
+      js: {
+        // за сохранением каких файлов следить
+        files: ['source/**/*.js'],
+        // какую задачу при этом запускать
+        tasks: ['js'],
+        options: {
+          spawn: false
+        },
+      }
     },
 	
 	// локальный сервер, автообновление
@@ -276,7 +286,7 @@ module.exports = function(grunt) {
     'uglify',
     'imagemin',
     'replace',
-    'gh-pages',
+//    'gh-pages',
     'browserSync',
 	'watch'
     
@@ -302,4 +312,9 @@ module.exports = function(grunt) {
     'includereplace:html'
   ]);
 
+  // только обработка js
+  grunt.registerTask('js', [
+    'copy:js',
+    'uglify'
+  ]);
 };
