@@ -121,13 +121,15 @@ module.exports = function(grunt) {
       }
     },
     
-    // csscomb
+    // сортируем css
     csscomb: {
       dist: {
         options: {
+          // путь к конфигурационному файлу
           config: 'csscomb.json'
         },
         files: {
+          // в какой файл, из какого файла (тут это один и тот же файл)
           'build/css/style.css': ['build/css/style.css']
         }
       }
