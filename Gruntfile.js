@@ -18,14 +18,14 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'source/scss',
           src: ['*.scss'],
-          dest: 'source/css',
+          dest: 'build/css',
           ext: '.css'
         }]
       }
     },
 	
 
-	// копируем файлы из папки source в папку build и дальше работаем с этой папкой
+	// копируем файлы из папки source в папку build
     copy: {
       img: {
         expand: true,
@@ -47,44 +47,14 @@ module.exports = function(grunt) {
         dest: 'build/js/',
       },
       
-      css: {
+      fonts: {
         expand: true,
         // откуда
-        cwd: 'source/css/',
-        // какие файлы
-        src: ['*.css'],
-        // куда
-        dest: 'build/css/',
-      },
-      
-      font: {
-        expand: true,
-        // откуда
-        cwd: 'source/font/',
+        cwd: 'source/fonts/',
         // какие файлы
         src: ['**'],
         // куда
-        dest: 'build/font/',
-      },
-      
-      includes: {
-        expand: true,
-        // откуда
-        cwd: 'source/includes/',
-        // какие файлы
-        src: ['**'],
-        // куда
-        dest: 'build/includes/',
-      },
-      
-      html: {
-        expand: true,
-        // откуда
-        cwd: 'source/',
-        // какие файлы
-        src: ['*.html'],
-        // куда
-        dest: 'build/',
+        dest: 'build/fonts/',
       }
 	},
 	
@@ -104,7 +74,7 @@ module.exports = function(grunt) {
     // autoprefixer
     autoprefixer: {
       options: {
-	    browsers: ["last 4 version", "ie 10"]
+	    browsers: ["last 4 version", "ie 11"]
 	  },
 	  style: {
 		src: "build/css/style.css"
@@ -199,15 +169,6 @@ module.exports = function(grunt) {
         ]
       }
     },
-	
-    // публикация на GitHub Pages (будет доступен в сети по адресу http://tamtamlg.github.io/НАЗВАНИЕ-РЕПОЗИТОРИЯ/)
-    'gh-pages': {
-      options: {
-        // какую папку считать результатом работы
-        base: 'build'
-      },
-      src: '**/*'
-    },
     
 	//Отслеживаем изменения
     watch: {
@@ -224,7 +185,7 @@ module.exports = function(grunt) {
         tasks: ['style'],
         options: {
           spawn: false,
-        },
+        }
       },
       // следить за картинками
       images: {
@@ -234,7 +195,7 @@ module.exports = function(grunt) {
         tasks: ['img'],
         options: {
           spawn: false
-        },
+        }
       },
       // следить за файлами разметки
       html: {
@@ -244,7 +205,7 @@ module.exports = function(grunt) {
         tasks: ['html'],
         options: {
           spawn: false
-        },
+        }
       },
       // следить за скриптами
       js: {
@@ -254,7 +215,17 @@ module.exports = function(grunt) {
         tasks: ['js'],
         options: {
           spawn: false
-        },
+        }
+      },
+      // следить за шрифтами
+      fonts: {
+        // за сохранением каких файлов следить
+        files: ['source/fonts/**'],
+        // какую задачу при этом запускать
+        tasks: ['fonts'],
+        options: {
+          spawn: false
+        }
       }
     },
 	
@@ -267,7 +238,7 @@ module.exports = function(grunt) {
             'build/css/*.css',
             'build/js/*.js',
             'build/img/*.{png,jpg,gif,svg}',
-            'build/*.html',
+            'build/**/*.html',
           ]
         },
         options: {
@@ -297,11 +268,10 @@ module.exports = function(grunt) {
     'autoprefixer',
     'cmq',
     'csscomb',
-    'cssmin',
-    'uglify',
+//    'cssmin',
+//    'uglify',
     'imagemin',
-    'replace',
-//    'gh-pages',
+//    'replace',
     'browserSync',
 	'watch'
     
@@ -310,10 +280,9 @@ module.exports = function(grunt) {
   // только компиляция стилей
   grunt.registerTask('style', [
     'sass',
-    'copy:css',
     'cmq',
-    'csscomb',
-    'cssmin'
+    'csscomb'
+//    'cssmin'
   ]);
   
   // только обработка картинок
@@ -324,14 +293,18 @@ module.exports = function(grunt) {
   
   // только обработка html
   grunt.registerTask('html', [
-    'copy:html',
-    'copy:includes',
     'includereplace:html'
   ]);
 
   // только обработка js
   grunt.registerTask('js', [
-    'copy:js',
-    'uglify'
+    'copy:js'
+//    'uglify'
   ]);
+    
+  // только обработка fonts
+  grunt.registerTask('fonts', [
+    'copy:fonts'
+  ]);
+    
 };
