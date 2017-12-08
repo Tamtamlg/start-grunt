@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // подключаем плагин load-grunt-tasks, чтобы не перечислять все прочие плагины
   require('load-grunt-tasks')(grunt);
@@ -10,8 +10,8 @@ module.exports = function(grunt) {
     clean: {
       build: ['build']
     },
-	
-	// компилируем scss
+
+    // компилируем scss
     sass: {
       source: {
         files: [{
@@ -23,16 +23,16 @@ module.exports = function(grunt) {
         }]
       }
     },
-	
 
-	// копируем файлы из папки source в папку build
+
+    // копируем файлы из папки source в папку build
     copy: {
       img: {
         expand: true,
         // откуда
         cwd: 'source/img/',
         // какие файлы
-        src: ['**/*.{png,jpg,gif,svg}'],
+        src: ['**'],
         // куда
         dest: 'build/img/',
       },
@@ -42,11 +42,11 @@ module.exports = function(grunt) {
         // откуда
         cwd: 'source/js/',
         // какие файлы
-        src: ['*.js'],
+        src: ['**'],
         // куда
         dest: 'build/js/',
       },
-      
+
       fonts: {
         expand: true,
         // откуда
@@ -55,9 +55,31 @@ module.exports = function(grunt) {
         src: ['**'],
         // куда
         dest: 'build/fonts/',
+      },
+
+      video: {
+        expand: true,
+        // откуда
+        cwd: 'source/video/',
+        // какие файлы
+        src: ['**'],
+        // куда
+        dest: 'build/video/',
       }
-	},
-	
+    },
+
+    // собираем svg-спрайт
+    svgstore: {
+      options: {
+        prefix: 'svg-',
+      },
+      default: {
+        files: {
+          'build/img/sprite.svg': ['source/img/svg/*.svg'],
+        }
+      }
+    },
+
     // обрабатываем разметку
     includereplace: {
       html: {
@@ -70,17 +92,17 @@ module.exports = function(grunt) {
         dest: 'build/',
       }
     },
-    
+
     // autoprefixer
     autoprefixer: {
       options: {
-	    browsers: ["last 4 version", "ie 11"]
-	  },
-	  style: {
-		src: "build/css/style.css"
+        browsers: ["last 4 version", "ie 11"]
+      },
+      style: {
+        src: "build/css/style.css"
       }
-	},
-    
+    },
+
     // объединяем медиавыражения
     cmq: {
       style: {
@@ -90,7 +112,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     // сортируем css
     csscomb: {
       dist: {
@@ -124,57 +146,56 @@ module.exports = function(grunt) {
         }]
       }
     },
-	
-	// Сжимаем js
+
+    // Сжимаем js
     uglify: {
       build: {
-          src: 'build/js/main.js',
-          dest: 'build/js/main.min.js'
+        src: 'build/js/main.js',
+        dest: 'build/js/main.min.js'
       }
     },
-	
-	//Сжимаем картинки
-    imagemin: { 
-      images: {         
-        options: {           
-          optimizationLevel: 3         
-        },         
-        files: [{           
-          expand: true,           
-          src: ["build/img/**/*.{png,jpg,gif,svg}"]         
-        }]       
-      } 
+
+    //Сжимаем картинки
+    imagemin: {
+      images: {
+        options: {
+          optimizationLevel: 3
+        },
+        files: [{
+          expand: true,
+          src: ["build/img/**/*.{png,jpg,gif,svg}"]
+        }]
+      }
     },
 
     // Заменяем пути в файлх *.html
     replace: {
       dist: {
         options: {
-          patterns: [
-            {
-              match: /\"js\/main.js/g, 
+          patterns: [{
+              match: /\"js\/main.js/g,
               replacement: '"js/main.min.js'
             },
             {
-              match: /\"css\/style.css/g, 
+              match: /\"css\/style.css/g,
               replacement: '"css/style.min.css'
             }
           ]
         },
-        files: [
-          {
-			expand: true, 
-		    src: ['build/*.html']
-		  }
-        ]
+        files: [{
+          expand: true,
+          src: ['build/*.html']
+        }]
       }
     },
-    
-	//Отслеживаем изменения
+
+    //Отслеживаем изменения
     watch: {
       // перезагрузка
       livereload: {
-        options: { livereload: true },
+        options: {
+          livereload: true
+        },
         files: ['build/**/*'],
       },
       // следить за стилями
@@ -226,19 +247,40 @@ module.exports = function(grunt) {
         options: {
           spawn: false
         }
+      },
+      // следить за видео
+      video: {
+        // за сохранением каких файлов следить
+        files: ['source/video/**'],
+        // какую задачу при этом запускать
+        tasks: ['video'],
+        options: {
+          spawn: false
+        }
+      },
+      // следить svg
+      svg: {
+        // за сохранением каких файлов следить
+        files: ['source/img/svg/**'],
+        // какую задачу при этом запускать
+        tasks: ['svg'],
+        options: {
+          spawn: false
+        }
       }
     },
-	
-	// локальный сервер, автообновление
+
+    // локальный сервер, автообновление
     browserSync: {
       dev: {
         bsFiles: {
           // за изменением каких файлов следить для автообновления открытой в браузере страницы с локального сервера
-          src : [
+          src: [
             'build/css/*.css',
             'build/js/*.js',
             'build/img/*.{png,jpg,gif,svg}',
             'build/**/*.html',
+            'build/video/**/',
           ]
         },
         options: {
@@ -264,33 +306,34 @@ module.exports = function(grunt) {
     'clean',
     'sass',
     'copy',
+    'svgstore',
     'includereplace:html',
     'autoprefixer',
     'cmq',
     'csscomb',
-//    'cssmin',
-//    'uglify',
-    'imagemin',
-//    'replace',
+    //    'cssmin',
+    //    'uglify',
+    // 'imagemin',
+    //    'replace',
     'browserSync',
-	'watch'
-    
+    'watch'
+
   ]);
-  
+
   // только компиляция стилей
   grunt.registerTask('style', [
     'sass',
     'cmq',
     'csscomb'
-//    'cssmin'
+    //    'cssmin'
   ]);
-  
+
   // только обработка картинок
   grunt.registerTask('img', [
     'copy:img',
-    'imagemin'
+    // 'imagemin'
   ]);
-  
+
   // только обработка html
   grunt.registerTask('html', [
     'includereplace:html'
@@ -299,12 +342,22 @@ module.exports = function(grunt) {
   // только обработка js
   grunt.registerTask('js', [
     'copy:js'
-//    'uglify'
+    //    'uglify'
   ]);
-    
+
   // только обработка fonts
   grunt.registerTask('fonts', [
     'copy:fonts'
   ]);
-    
+
+  // только обработка видео
+  grunt.registerTask('video', [
+    'copy:video'
+  ]);
+
+  // сборка svg
+  grunt.registerTask('svg', [
+    'svgstore'
+  ]);
+
 };
