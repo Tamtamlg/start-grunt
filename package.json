@@ -1,5 +1,5 @@
 {
-  "name": "project",
+  "name": "vencon",
   "version": "1.0.0",
   "main": "Gruntfile.js",
   "author": "Tamtamlg",
@@ -21,19 +21,8 @@
     "grunt-gh-pages": "^2.0.0",
     "grunt-include-replace": "^5.0.0",
     "grunt-replace": "^1.0.1",
+    "grunt-sass": "^2.0.0",
+    "grunt-svgstore": "^1.0.0",
     "load-grunt-tasks": "^3.5.2"
-  },
-  "dependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Tamtamlg/start.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Tamtamlg/start/issues"
-  },
-  "homepage": "https://github.com/Tamtamlg/start#readme",
-  "description": ""
+  }
 }
