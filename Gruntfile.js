@@ -69,7 +69,7 @@ module.exports = function (grunt) {
 
     // собираем svg-спрайт, используем так:
     // <svg class="svg" width="50px" height="50px">
-    //  <use xlink:href="img/sprite.svg#svg-heart"></use>
+    //  <use xlink:href="img/sprite.svg#chevron-down"></use>
     // </svg>
     svgstore: {
       options: {
