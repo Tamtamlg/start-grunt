@@ -69,7 +69,7 @@ module.exports = function (grunt) {
 
     // собираем svg-спрайт, используем так:
     // <svg class="svg" width="50px" height="50px">
-    //  <use xlink:href="img/sprite.svg#chevron-down"></use>
+    //  <use xlink:href="img/sprite.svg#svg-heart"></use>
     // </svg>
     svgstore: {
       options: {
@@ -93,6 +93,21 @@ module.exports = function (grunt) {
         // куда писать результат обработки
         dest: 'build/',
       }
+    },
+
+    // форматируем разметку после сборки
+    prettify: {
+      options: {
+        config: '.prettifyrc'
+      },
+      all: {
+        expand: true,
+        // в какую папку, из какой папки (тут это одина и та же папка)
+        cwd: 'build/',
+        ext: '.html',
+        src: ['*.html'],
+        dest: 'build/'
+      },
     },
 
     // autoprefixer
@@ -262,6 +277,7 @@ module.exports = function (grunt) {
     'copy',
     'svgstore',
     'includereplace:html',
+    'prettify',
     'autoprefixer',
     'cmq',
     'csscomb',
@@ -286,7 +302,8 @@ module.exports = function (grunt) {
 
   // только обработка html
   grunt.registerTask('html', [
-    'includereplace:html'
+    'includereplace:html',
+    'prettify'
   ]);
 
   // только обработка js
