@@ -169,7 +169,7 @@ module.exports = function (grunt) {
       // следить за стилями
       style: {
         // за сохранением каких файлов следить
-        files: ['source/scss/**/*.scss'],
+        files: ['source/**/*.scss'],
         // какую задачу при этом запускать
         tasks: ['style'],
         options: {
