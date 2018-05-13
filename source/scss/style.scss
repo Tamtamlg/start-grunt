@@ -207,6 +207,15 @@ input.error {
 
 /* /validation */
 
+/* disable pointer-events */
 svg {
   pointer-events: none;
 }
+
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important;
+}
+/* disable pointer-events */
+
+@import "_includes.scss"
