@@ -11,9 +11,27 @@ module.exports = function (grunt) {
       build: ['build']
     },
 
+    // собираем все импорты из папки includes в один файл
+    sass_compile_imports: {
+      keep_extension: {
+        options: {
+            quiet: true
+        },
+        target: 'source/scss/_includes.scss',
+        files: [{
+            expand: true,
+            cwd   : 'source/includes/',
+            src   : ['**/*.scss']
+        }]
+      }
+    },
+
     // компилируем scss
     sass: {
       source: {
+        options: {
+          sourceMap: true
+        },
         files: [{
           expand: true,
           cwd: 'source/scss',
@@ -28,42 +46,42 @@ module.exports = function (grunt) {
     copy: {
       img: {
         expand: true,
-        // откуда
         cwd: 'source/img/',
-        // какие файлы
         src: ['**'],
-        // куда
         dest: 'build/img/',
       },
 
       js: {
         expand: true,
-        // откуда
         cwd: 'source/js/',
-        // какие файлы
         src: ['**'],
-        // куда
         dest: 'build/js/',
       },
 
       fonts: {
         expand: true,
-        // откуда
         cwd: 'source/fonts/',
-        // какие файлы
         src: ['**'],
-        // куда
         dest: 'build/fonts/',
       },
 
       video: {
         expand: true,
-        // откуда
         cwd: 'source/video/',
-        // какие файлы
         src: ['**'],
-        // куда
         dest: 'build/video/',
+      }
+    },
+
+    // оптимизируем svg
+    svgo: {
+      dynamic: {
+        files: [{
+          expand: true,
+          cwd: 'source/svg/',
+          src: ['**/*.svg'],
+          dest: 'source/svg/'
+        }]
       }
     },
 
@@ -83,14 +101,12 @@ module.exports = function (grunt) {
     },
 
     // обрабатываем разметку
+    // используем так: @@include('includes/header/header.html')
     includereplace: {
       html: {
         expand: true,
-        // откуда брать исходные файлы
         cwd: 'source/',
-        // какие файлы обрабатывать
         src: '*.html',
-        // куда писать результат обработки
         dest: 'build/',
       }
     },
@@ -102,7 +118,6 @@ module.exports = function (grunt) {
       },
       all: {
         expand: true,
-        // в какую папку, из какой папки (тут это одина и та же папка)
         cwd: 'build/',
         ext: '.html',
         src: ['*.html'],
@@ -124,7 +139,6 @@ module.exports = function (grunt) {
     cmq: {
       style: {
         files: {
-          // в какой файл, из какого файла (тут это один и тот же файл)
           'build/css/style.css': ['build/css/style.css']
         }
       }
@@ -134,11 +148,9 @@ module.exports = function (grunt) {
     csscomb: {
       dist: {
         options: {
-          // путь к конфигурационному файлу
           config: 'csscomb.json'
         },
         files: {
-          // в какой файл, из какого файла (тут это один и тот же файл)
           'build/css/style.css': ['build/css/style.css']
         }
       }
@@ -178,9 +190,7 @@ module.exports = function (grunt) {
       },
       // следить за картинками
       images: {
-        // за сохранением каких файлов следить
         files: ['source/img/**/*.{png,jpg,gif,svg}'],
-        // какую задачу при этом запускать
         tasks: ['img'],
         options: {
           spawn: false
@@ -188,9 +198,7 @@ module.exports = function (grunt) {
       },
       // следить за файлами разметки
       html: {
-        // за сохранением каких файлов следить
         files: ['source/**/*.html'],
-        // какую задачу при этом запускать
         tasks: ['html'],
         options: {
           spawn: false
@@ -198,9 +206,7 @@ module.exports = function (grunt) {
       },
       // следить за скриптами
       js: {
-        // за сохранением каких файлов следить
         files: ['source/**/*.js'],
-        // какую задачу при этом запускать
         tasks: ['js'],
         options: {
           spawn: false
@@ -208,9 +214,7 @@ module.exports = function (grunt) {
       },
       // следить за шрифтами
       fonts: {
-        // за сохранением каких файлов следить
         files: ['source/fonts/**'],
-        // какую задачу при этом запускать
         tasks: ['fonts'],
         options: {
           spawn: false
@@ -218,19 +222,15 @@ module.exports = function (grunt) {
       },
       // следить за видео
       video: {
-        // за сохранением каких файлов следить
         files: ['source/video/**'],
-        // какую задачу при этом запускать
         tasks: ['video'],
         options: {
           spawn: false
         }
       },
-      // следить svg
+      // следить за svg
       svg: {
-        // за сохранением каких файлов следить
         files: ['source/svg/**'],
-        // какую задачу при этом запускать
         tasks: ['svg'],
         options: {
           spawn: false
@@ -248,6 +248,7 @@ module.exports = function (grunt) {
             'build/js/*.js',
             'build/fonts/**',
             'build/img/*.{png,jpg,gif,svg}',
+            'build/svg/*.svg',
             'build/**/*.html',
             'build/video/**/',
           ]
@@ -273,15 +274,17 @@ module.exports = function (grunt) {
   // задача по умолчанию
   grunt.registerTask('default', [
     'clean',
+    'sass_compile_imports',
     'sass',
     'copy',
+    'svgo',
     'svgstore',
     'includereplace:html',
     'prettify',
     'autoprefixer',
     'cmq',
     'csscomb',
-    // 'imagemin',
+    'imagemin',
     'browserSync',
     'watch'
 
@@ -289,6 +292,7 @@ module.exports = function (grunt) {
 
   // только компиляция стилей
   grunt.registerTask('style', [
+    'sass_compile_imports',
     'sass',
     'cmq',
     'csscomb'
@@ -297,7 +301,7 @@ module.exports = function (grunt) {
   // только обработка картинок
   grunt.registerTask('img', [
     'copy:img',
-    // 'imagemin'
+    'imagemin'
   ]);
 
   // только обработка html
@@ -323,6 +327,7 @@ module.exports = function (grunt) {
 
   // сборка svg
   grunt.registerTask('svg', [
+    'svgo',
     'svgstore'
   ]);
 

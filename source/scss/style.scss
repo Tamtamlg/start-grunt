@@ -1,5 +1,4 @@
 @import "variables.scss";
-
 .clearfix:after {
   content: "";
   display: table;
@@ -9,14 +8,17 @@
 ::-webkit-input-placeholder {
   color: $placeholder;
 }
+
 ::-moz-placeholder {
-  color: $placeholde;
+  color: $placeholder;
 }
+
 :-moz-placeholder {
-  color: $placeholde;
+  color: $placeholder;
 }
+
 :-ms-input-placeholder {
-  color: $placeholde;
+  color: $placeholder;
 }
 
 // @media (min-width: 1300px) {
@@ -24,6 +26,22 @@
 //     max-width: 1320px;
 //   }
 // }
+/* fixed footer */
+
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content {
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+}
+
+/* /fixed footer */
 
 /* preloader */
 
@@ -47,7 +65,7 @@
 .spinner>div {
   width: 18px;
   height: 18px;
-  background-color: $indigo;
+  background-color: $spinnercolor;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -105,3 +123,90 @@
 }
 
 /* /bootstrap hack */
+
+/* custom radio and checkbox */
+
+.radio-label {
+  position: relative;
+}
+
+.input-group {
+  input[type="radio"],
+  input[type="checkbox"] {
+    display: none;
+  }
+}
+
+input[type="radio"]+label,
+input[type="checkbox"]+label {
+  display: flex;
+  margin: 0;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="radio"]+label:before {
+  content: '';
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin-right: 10px;
+}
+
+input[type="radio"]:checked+label:after {
+  content: '';
+  background: $black;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  display: block;
+  position: absolute;
+  left: 4px;
+  top: 6px;
+}
+
+input[type="checkbox"]+label:before {
+  content: '';
+  border: 1px solid #ddd;
+  width: 18px;
+  height: 18px;
+  display: block;
+  margin-right: 10px;
+}
+
+input[type="checkbox"]:checked+label:before {
+  background: $black url(../img/checkbox.svg) center no-repeat;
+  background-size: 11px 8px;
+  border-color: $black;
+}
+
+/* /custom radio and checkbox*/
+
+/* validation */
+
+.input-wrap {
+  position: relative;
+}
+
+input.error {
+  border: 1px solid $error;
+}
+
+.help-block.form-error {
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+  font-size: 12px;
+  color: $error;
+  z-index: 1;
+}
+
+/* /validation */
+
+svg {
+  pointer-events: none;
+}
