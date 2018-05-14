@@ -55,7 +55,7 @@ source/         # Исходные файлы.
 ## Разметка
 
 HTML обрабатывается "grunt-include-replace".
-Блок вставляется в разметку так: `@@include('includes/header/header.html')`
+Блок вставляется в разметку так: `@@include('includes/header/header.html')`, можно использовать json для передачи параметров ` @@include('tabs-slider-item/tabs-slider-item.html', {"img": "img/tabs-slider-2.jpg"})`. Параметры из json всавляются в html-файл блока так: `<img src="@@img" alt="">`.
 
 
 
@@ -81,7 +81,7 @@ HTML обрабатывается "grunt-include-replace".
 
 ```bash
 demo-block/               # Папка блока.
-  demo-block.html         # Разметка (pug-примесь, отдающая разметку блока, описание API примеси).
+  demo-block.html         # Разметка.
   demo-block.scss         # Стилевой файл блока.
 ```
 
